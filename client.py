@@ -1,27 +1,22 @@
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-from collections import deque
 from connection import connect, get_state_reward
 import sys
 
-# Q-learning parameters
-ALPHA = 0.1       # Learning rate
-GAMMA = 0.9       # Discount factor
-EPSILON = 1.0     # Initial exploration rate
+ALPHA = 0.1       
+GAMMA = 0.9       
+EPSILON = 1.0     
 EPSILON_MIN = 0.05
 EPSILON_DECAY = 0.999
 NUM_EPISODES = 5000
 SAVE_FREQ = 100
 
-# Available actions
 ACTIONS = ["left", "right", "jump"]
 
-# Convert binary state to index
 def state_to_index(state_bin):
     return int(state_bin, 2)
 
-# Epsilon-greedy action selection
 def choose_action(q_table, state_index, epsilon):
     if random.random() < epsilon:
         print("Explorando ação aleatória")
@@ -29,7 +24,6 @@ def choose_action(q_table, state_index, epsilon):
     print("Explotando ação com Q-table")
     return np.argmax(q_table[state_index])
 
-# Save Q-table to a file
 def save_q_table(q_table, filename="resultado.txt"):
     with open(filename, "w") as f:
         for row in q_table:
@@ -50,13 +44,12 @@ def main():
         print("Resuming training from existing Q-table.")
         q_table = load_q_table()
     else:
-        q_table = np.zeros((96, 3))  # 96 states x 3 actions
+        q_table = np.zeros((96, 3)) 
 
     reward_per_step_history = []
 
     epsilon = EPSILON
 
-    # Live plot setup
     plt.ion()
     fig, ax = plt.subplots()
     line, = ax.plot([], [], label='Recompensa média por passo')
@@ -103,17 +96,14 @@ def main():
         print(f"Epsilon: {epsilon:.4f}")
         print("=" * 20)
 
-        # Reward per step calculation
         reward_per_step = total_reward / steps if steps > 0 else total_reward
         reward_per_step_history.append(reward_per_step)
 
-        # Decay epsilon
         if epsilon > EPSILON_MIN:
             epsilon *= EPSILON_DECAY
             epsilon = max(epsilon, EPSILON_MIN)
 
         if episode % 10 == 0:
-            # Update plot
             line.set_xdata(np.arange(len(reward_per_step_history)))
             line.set_ydata(reward_per_step_history)
             ax.relim()
@@ -124,11 +114,9 @@ def main():
             save_q_table(q_table)
             print(f"Q-table saved at episode {episode}.")
 
-    # Save Q-table after training
     save_q_table(q_table)
     print("Treinamento finalizado. Q-table salva em 'resultado.txt'.")
 
-    # Keep plot visible at the end
     plt.ioff()
     plt.show()
 

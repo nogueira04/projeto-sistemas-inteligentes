@@ -36,10 +36,10 @@ def run_test_episode(q_table):
         print(f"Step {steps}: Action={action}, Reward={reward}")
 
         if reward <= -100:
-            print("Amongois caiu! 💀")
+            print("Perdeu")
             done = True
         elif reward == -1:
-            print("Amongois andou! 👣")
+            print("Ganhou")
             done = True
 
     print(f"\nEpisódio de teste finalizado com {steps} passos. Recompensa total: {total_reward}")
