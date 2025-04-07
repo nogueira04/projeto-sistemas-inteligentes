@@ -6,11 +6,11 @@ from connection import connect, get_state_reward
 import sys
 
 # Q-learning parameters
-ALPHA = 0.1       # Learning rate
+ALPHA = 0.2       # Learning rate
 GAMMA = 0.9       # Discount factor
 EPSILON = 1.0     # Initial exploration rate
 EPSILON_MIN = 0.05
-EPSILON_DECAY = 0.999
+EPSILON_DECAY = 0.995
 NUM_EPISODES = 5000
 SAVE_FREQ = 100
 
@@ -26,7 +26,7 @@ def choose_action(q_table, state_index, epsilon):
     if random.random() < epsilon:
         print("Explorando ação aleatória")
         return random.randint(0, 2)
-    print("Explotando ação com Q-table")
+    print("Explorando ação com Q-table")
     return np.argmax(q_table[state_index])
 
 # Save Q-table to a file
